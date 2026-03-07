@@ -46,6 +46,9 @@ buttons.addEventListener("click", function (e) {
         else para.textContent += buttonValue;
     }
     else if (e.target.id === "multiplication") {
+        if (!para.textContent){
+            return
+        }
         if (a !== "" && currentOperator !== "") {
             runCalculation(currentOperator)
         }
@@ -55,6 +58,10 @@ buttons.addEventListener("click", function (e) {
         setOperator("x")
     }
     else if (e.target.id === "division") {
+        if (!para.textContent){
+            return
+        }
+        
         if (a !== "" && currentOperator !== "") {
             runCalculation(currentOperator)
         }
@@ -64,8 +71,10 @@ buttons.addEventListener("click", function (e) {
         setOperator("/")
     }
     else if (e.target.id === "addition") {
-        if (!para.textContent){return}
-        if (a !== "" && currentOperator !== "") {
+        if (!para.textContent){
+            return
+        }
+        if (a !== "" && currentOperator !== "" ) {
             runCalculation(currentOperator);
         }
         if (para.textContent.includes("Nope")) {
@@ -74,6 +83,9 @@ buttons.addEventListener("click", function (e) {
         setOperator("+")
     }
     else if (e.target.id === "substraction") {
+        if (!para.textContent){
+            return
+        }
         if (a !== "" && currentOperator !== "") {
             runCalculation(currentOperator)
         }
