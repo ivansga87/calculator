@@ -22,11 +22,19 @@ buttons.addEventListener("click", function (e) {
     }
 
     else if (e.target.id === "backspace"){
-        para.textContent = para.textContent.slice(0, -1)
+        if(currentOperator){
+            resetDisplay = false
+            currentOperator = ""
+            return
+            }
+
+        else para.textContent = para.textContent.slice(0, -1)
+        
         if (para.textContent.includes(".")){
             period = true; 
              
         }
+        
         else period = false;
         
     }
@@ -56,6 +64,7 @@ buttons.addEventListener("click", function (e) {
         setOperator("/")
     }
     else if (e.target.id === "addition") {
+        if (!para.textContent){return}
         if (a !== "" && currentOperator !== "") {
             runCalculation(currentOperator);
         }
