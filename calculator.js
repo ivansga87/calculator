@@ -20,6 +20,16 @@ buttons.addEventListener("click", function (e) {
         currentOperator = "";
         period = false;
     }
+
+    else if (e.target.id === "backspace"){
+        para.textContent = para.textContent.slice(0, -1)
+        if (para.textContent.includes(".")){
+            period = true; 
+             
+        }
+        else period = false;
+        
+    }
     else if (e.target.classList.contains("number")) {
         if (resetDisplay) {
             para.textContent = buttonValue;
@@ -80,8 +90,9 @@ buttons.addEventListener("click", function (e) {
     }
     else if (e.target.id === "period") {
         if (resetDisplay) {
-            para.textContent = buttonValue;
+            para.textContent = "0.";
             resetDisplay = false;
+            period = true;
         }
         else if (period) return;
         else {
@@ -125,7 +136,7 @@ function runCalc(currentOperator) {
     if (currentOperator === "/") return division(Number(a), Number(b));
     if (currentOperator === "+") return addition(Number(a), Number(b));
     if (currentOperator === "-") return substraction(Number(a), Number(b));
-    return 0;
+    return Number(para.textContent);
 }
 
 function addition(a, b) { return a + b; }
