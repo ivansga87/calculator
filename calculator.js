@@ -25,48 +25,53 @@ buttons.addEventListener("click", function (e) {
             para.textContent = buttonValue;
             resetDisplay = false;
         }
-
         else para.textContent += buttonValue;
     }
     else if (e.target.id === "multiplication") {
-        if (a !== "") {
+        if (a !== "" && currentOperator !== "") {
             runCalculation(currentOperator)
-
         }
-        else {
-           setOperator("x")
+        if (para.textContent.includes("Nope")) {
+            return currentOperator = "";
         }
-
+        setOperator("x")
     }
     else if (e.target.id === "division") {
-        if (a !== "") runCalculation(currentOperator)
-        
-        else setOperator("/")
-    }
-    else if (e.target.id === "addition") {
-        if (a !== "") {
-            runCalculation(currentOperator);
-
-        }
-
-        else {
-           setOperator("+")
-        }
-    }
-    else if (e.target.id === "substraction") {
-        if (a !== "") {
+        if (a !== "" && currentOperator !== "") {
             runCalculation(currentOperator)
         }
-
-        else {
-            setOperator("-")
+        if (para.textContent.includes("Nope")) {
+            return currentOperator = "";
         }
-
+        setOperator("/")
+    }
+    else if (e.target.id === "addition") {
+        if (a !== "" && currentOperator !== "") {
+            runCalculation(currentOperator);
+        }
+        if (para.textContent.includes("Nope")) {
+            return currentOperator = "";
+        }
+        setOperator("+")
+    }
+    else if (e.target.id === "substraction") {
+        if (a !== "" && currentOperator !== "") {
+            runCalculation(currentOperator)
+        }
+        if (para.textContent.includes("Nope")) {
+            return currentOperator = "";
+        }
+        setOperator("-")
     }
     else if (e.target.id === "equal") {
         b = para.textContent;
         const result = runCalc(currentOperator);
-        para.textContent = Number(result.toFixed(4));
+        if (result === "Nope") {
+            para.textContent = "Nope"
+        }
+        else {
+            para.textContent = Number(result.toFixed(4))
+        }
         a = "";
         b = "";
         currentOperator = "";
@@ -79,8 +84,6 @@ buttons.addEventListener("click", function (e) {
             resetDisplay = false;
         }
         else if (period) return;
-
-
         else {
             para.textContent += buttonValue
             period = true
@@ -94,14 +97,26 @@ buttons.addEventListener("click", function (e) {
 
 
 function runCalculation(currentOperator) {
-    currentOperator = currentOperator;
     b = para.textContent;
     const result = runCalc(currentOperator);
-    para.textContent = Number(result.toFixed(4));
+    if (result === "Nope") {
+        para.textContent = "Nope"
+        a = "";
+        b = "";
+        currentOperator = "";
+        period = false;
+        resetDisplay = true;
+        return
+
+    }
+    else {
+        para.textContent = Number(result.toFixed(4))
+    }
     a = result;
     b = "";
     resetDisplay = true;
     period = false;
+
 
 }
 
@@ -113,20 +128,24 @@ function runCalc(currentOperator) {
     return 0;
 }
 
-function addition(a, b){return a + b;}
+function addition(a, b) { return a + b; }
 
-function substraction(a, b) {return a - b;}
+function substraction(a, b) { return a - b; }
 
-function multiplication(a, b) {return a * b;}
+function multiplication(a, b) { return a * b; }
 
 function division(a, b) {
-    if (b === 0) return "cant divede by 0";
-    return a / b;
+    if (b === 0) {
+        return "Nope"
+
+    }
+    else return a / b;
 }
 
 function setOperator(opSymbol) {
-    a = para.textContent
+    a = para.textContent;
     currentOperator = opSymbol;
     period = false;
     resetDisplay = true;
+
 }
