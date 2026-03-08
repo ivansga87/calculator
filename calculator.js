@@ -66,8 +66,8 @@ buttons.addEventListener("click", function (e) {
         checkCondition("-")
     }
     else if (e.target.id === "equal") {
-        if (para.textContent === "."){
-            return 
+        if (para.textContent === ".") {
+            return
         }
 
         if (para.textContent === "can't dive by 0") {
@@ -84,7 +84,7 @@ buttons.addEventListener("click", function (e) {
         else {
             para.textContent = Number(result.toFixed(4))
             clear();
-                       
+
         }
     }
     else if (e.target.id === "period") {
@@ -117,7 +117,7 @@ function runCalculation(nextOp) {
     }
     else {
         para.textContent = Number(result.toFixed(4))
-        
+
     }
     clear()
     a = result;
@@ -159,17 +159,17 @@ function checkCondition(nextOp) {
     if (!para.textContent) {
         return
     }
-   
-    else if (para.textContent === "."){
-        return 
+
+    else if (para.textContent === ".") {
+        return
     }
-    
+
     else if (a !== "" && currentOperator !== "" && b === "") {
         return
     }
     else if (para.textContent === "Can't dive by 0") {
         para.textContent = "can't dive by 0"
-       clear()
+        clear()
     }
 
     else if (a !== "" && currentOperator !== "" && b !== "") {
@@ -191,5 +191,29 @@ function clear() {
     currentOperator = "";
     resetDisplay = true;
     period = false;
-    
+
 }
+window.addEventListener("keydown", function (e) {
+    if (e.key >= "0" && e.key <= "9") {
+        const numBtn = Array.from(document.querySelectorAll(".number"))
+            .find(btn => btn.textContent === e.key);
+        if (numBtn) numBtn.click();
+    }
+
+
+    else if (e.key === "+") {
+        const btn = document.getElementById("addition");
+        btn.classList.add("active");
+        btn.click();
+        setTimeout(() => {
+            btn.classList.remove('active')
+        }, 1000)
+    }
+    else if (e.key === "*") document.getElementById("multiplication").click();
+    else if (e.key === "/") document.getElementById("division").click();
+    else if (e.key === "-") document.getElementById("substraction").click();
+    else if (e.key === "Enter" || e.key === "=") document.getElementById("equal").click();
+    else if (e.key === "Backspace") document.getElementById("backspace").click();
+    else if (e.key === "Delete" || e.key === "Escape") document.getElementById("clear").click();
+    else if (e.key === ".") document.getElementById("period").click();
+});
