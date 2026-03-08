@@ -42,6 +42,7 @@ buttons.addEventListener("click", function (e) {
         if (resetDisplay) {
             para.textContent = "";
             resetDisplay = false;
+            result = ""
         }
         if (a !== "" && currentOperator !== "") {
             para.textContent += buttonValue;
