@@ -17,6 +17,7 @@ buttons.addEventListener("click", function (e) {
     if (e.target.id === "clear") {
         clear();
         para.textContent = "";
+        result = "";
     }
 
     else if (e.target.id === "backspace") {
@@ -27,6 +28,7 @@ buttons.addEventListener("click", function (e) {
         }
 
         else para.textContent = para.textContent.slice(0, -1)
+        a = para.textContent
 
         if (para.textContent.includes(".")) {
             period = true;
