@@ -1,13 +1,19 @@
 
+const memory = []
+let showMemory = document.getElementById("memory-display")
+showMemory.textContent = "";
 
 let a = "";
 let b = "";
 let currentOperator = "";
 let resetDisplay = false;
+let resetMemDisplay = false;
 let period = false;
 let result = "";
 const para = document.getElementById("display1")
+const lastMemory = document.getElementById("display2")
 para.textContent = "";
+lastMemory.textContent = "";
 
 
 
@@ -16,6 +22,7 @@ buttons.addEventListener("click", function (e) {
     const buttonValue = e.target.textContent;
     if (e.target.id === "clear") {
         clear();
+        lastMemory.textContent = "";
         para.textContent = "";
         result = "";
     }
@@ -39,18 +46,42 @@ buttons.addEventListener("click", function (e) {
 
     }
     else if (e.target.classList.contains("number")) {
+        if (resetMemDisplay) {
+            lastMemory.textContent = "";
+            resetMemDisplay = false;
+        }
+        const operators = ["x", "+", "-", "/"];
+        const lastChar = lastMemory.textContent.slice(-1); // Gets the last character
+
+        if (lastMemory.textContent.length > 15 || lastMemory.textContent.includes("=")) {
+            lastMemory.textContent = `${result} ${currentOperator}`;
+
+        }
+
+        if (operators.includes(lastChar)) {
+            lastMemory.textContent += ` ${buttonValue}`; // Add space if last was an op
+        } else {
+            lastMemory.textContent += buttonValue;       // No space if last was a number
+        }
         if (resetDisplay) {
             para.textContent = "";
-            resetDisplay = false;
             result = ""
+            resetDisplay = false;
+
+
         }
         if (a !== "" && currentOperator !== "") {
+
             para.textContent += buttonValue;
+
+
+
             b = para.textContent
         }
         else {
             para.textContent += buttonValue;
             a = para.textContent
+
         }
     }
     else if (e.target.id === "multiplication") {
@@ -66,6 +97,7 @@ buttons.addEventListener("click", function (e) {
         checkCondition("-")
     }
     else if (e.target.id === "equal") {
+        resetMemDisplay = true;
         if (para.textContent === ".") {
             return
         }
@@ -79,6 +111,7 @@ buttons.addEventListener("click", function (e) {
 
         if (result === "Can't dive by 0") {
             para.textContent = "can't dive by 0"
+            lastMemory.textContent = ""
             clear();
         }
         else {
@@ -134,22 +167,56 @@ function runCalc() {
     return Number(para.textContent);
 }
 
-function addition(a, b) { return a + b; }
+function addition(a, b) {
+     if(memory.length > 9){
+        memory.shift()
+    }
+    memory.push(`${a} + ${b} = ${a + b}`)
+    console.log(memory)
+    updateMemoryDisplay();
+    return a + b;
+}
 
-function substraction(a, b) { return a - b; }
+function substraction(a, b) {
+    if(memory.length > 9){
+        memory.shift()
+    }
+    memory.push(`${a} - ${b} = ${a - b}`)
+    console.log(memory)
+    updateMemoryDisplay();
+    
+    return a - b;
+}
 
-function multiplication(a, b) { return a * b; }
+function multiplication(a, b) {
+     if(memory.length > 9){
+        memory.shift()
+    }
+    memory.push(`${a} x ${b} = ${a * b}`)
+    console.log(memory)
+    updateMemoryDisplay();
+    return a * b;
+}
 
 function division(a, b) {
     if (b === 0) {
         return "Can't dive by 0"
 
     }
-    else return a / b;
+    else {
+         if(memory.length > 9){
+        memory.shift()
+    }
+        memory.push(`${a} / ${b} = ${a / b}`)
+        console.log(memory)
+        updateMemoryDisplay();
+        return a / b;
+    }
 }
 
 function setOperator(opSymbol) {
     currentOperator = opSymbol;
+    lastMemory.textContent += ` ${opSymbol}`;
     period = false;
     resetDisplay = true;
 
@@ -174,6 +241,7 @@ function checkCondition(nextOp) {
 
     else if (a !== "" && currentOperator !== "" && b !== "") {
         runCalculation(nextOp);
+        lastMemory.textContent += ` ${nextOp}`
     }
 
     else if (result) {
@@ -191,6 +259,7 @@ function clear() {
     currentOperator = "";
     resetDisplay = true;
     period = false;
+    lastMemory.textContent += ` = ${result}`;
 
 }
 window.addEventListener("keydown", function (e) {
@@ -207,7 +276,7 @@ window.addEventListener("keydown", function (e) {
         btn.click();
         setTimeout(() => {
             btn.classList.remove('active')
-        }, 1000)
+        }, 100)
     }
     else if (e.key === "*") document.getElementById("multiplication").click();
     else if (e.key === "/") document.getElementById("division").click();
@@ -217,3 +286,15 @@ window.addEventListener("keydown", function (e) {
     else if (e.key === "Delete" || e.key === "Escape") document.getElementById("clear").click();
     else if (e.key === ".") document.getElementById("period").click();
 });
+
+function updateMemoryDisplay() {
+    // 1. Clear the current list so you don't get duplicates
+    showMemory.innerHTML = ""; 
+
+    // 2. Loop through your memory array
+    memory.forEach(entry => {
+        const li = document.createElement("li"); // Create the element
+        li.textContent = entry;                  // Set the text
+        showMemory.appendChild(li);              // Add it to your <ul> or <ol>
+    });
+}
